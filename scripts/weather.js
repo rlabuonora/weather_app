@@ -7,7 +7,7 @@ var WeatherWidget = React.createClass({
 	      <p><h2>Montevideo, UY</h2></p>
 	      <p>Clouds, 292.353º F</p>
 	      <p><img src="http://openweathermap.org/img/w/10d.png" class="" alt="" /></p>
-	      <button class="btn btn-primary">Convert to Celsius</button>
+	      <button className="btn btn-primary">Convert to Celsius</button>
  	    </div>
           </div>
 	);
