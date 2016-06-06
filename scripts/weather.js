@@ -1,4 +1,14 @@
 var WeatherWidget = React.createClass({
+    getInitialState: function() {
+	return({
+	  city: "",
+	  country: "",
+	  temperature: "",
+	  units: "F",
+	  icon: "",
+	  coords: { lat: "", lon: ""}
+	});
+    },
     render: function() {
 	return (
 	  <div class="widget">
