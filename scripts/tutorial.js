@@ -11,10 +11,10 @@ if ("geolocation" in navigator) {
 }
 
 var api_key = "0a750722b1a62da8c5effe08c765e2cd";
-
 var lat = -34.8;
 var lon = -56.15;
-var url = "http://api.openweathermap.org/data/2.5/weather?lat="+ lat + "&lon=" + lon +"&APPID="  + api_key;
+var api_url = "http://api.openweathermap.org/data/2.5/weather";
+var url = api_url + "?lat="+ lat + "&lon=" + lon +"&APPID="  + api_key;
 
 $.ajax({
   url: url,
