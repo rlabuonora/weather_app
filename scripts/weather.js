@@ -44,7 +44,9 @@ var ConvertButton = React.createClass({
 	        className="btn btn-primary"
 	        onClick={this.onClick}
 		>
-		Convert to Celsius
+		Convert to { this.props.current_units === "F" ? 
+			     "Celsius" :
+			     "Fahrenheit" }
 	      </button>
 	);
     }
@@ -92,7 +94,6 @@ var WeatherWidget = React.createClass({
       }
     },
     handleUnitChange: function() {
-	console.log("Changing unit!");
 	this.state.units === "F" ?
 	    this.setState({ units: "C" }) :
 	    this.setState({ units: "F" });
