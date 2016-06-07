@@ -1,15 +1,24 @@
 var WeatherIcon = React.createClass({
     render: function() {
+	var image;
+	if (this.props.ready) {
+	    image = <img src={this.props.image_url + this.props.icon + ".png"} />;
+        } else {
+	    image = <i className="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+        };
 	return (
-          <p><img src={this.props.image_url + this.props.icon + ".png"} /></p>
+          <p>{image}</p>
 	);
     }
 });
 
 var Location = React.createClass({
     render: function() {
+	var location = this.props.ready ?
+	     this.props.city + ", "  + this.props.country :
+	     "";
 	return (
-          <h2>{this.props.city + ", "  + this.props.country}</h2>
+          <h2>{location}</h2>
 	);
     }
 });
@@ -24,11 +33,16 @@ var Weather = React.createClass({
 	return num.toFixed(2);
     },
     render: function() {
-	var temp = (this.props.units === "F") ? 
-	      this.kelvinToFahrenheit(this.props.temperature) : 
-	      this.kelvinToCelsius(this.props.temperature);
+	if (this.props.ready) {
+	  var temp = (this.props.units === "F") ? 
+		this.kelvinToFahrenheit(this.props.temperature) : 
+		this.kelvinToCelsius(this.props.temperature);
+	  var message = this.props.weather + ", "  + temp + "º " + this.props.units; 
+	} else {
+	  var message = "Getting Location...                  ";
+        }
 	return (
-          <p>{this.props.weather + ", "  + temp + "º " + this.props.units} </p>
+          <p>{message} </p>
 	);
     }
 });
@@ -51,6 +65,7 @@ var ConvertButton = React.createClass({
 	);
     }
 });
+
 var WeatherWidget = React.createClass({
     getInitialState: function() {
 	return({
@@ -59,7 +74,8 @@ var WeatherWidget = React.createClass({
 	  temperature: "",
 	  units: "F",
 	  icon: "",
-	  weather: ""
+	  weather: "",
+	  ready: false
 	});
     },
     loadDataFromServer: function(url) {
@@ -73,7 +89,8 @@ var WeatherWidget = React.createClass({
 	      country: data["sys"]["country"],
 	      temperature: data["main"]["temp"],
 	      icon: data["weather"][0]["icon"],
-	      weather: data["weather"][0]["main"]
+	      weather: data["weather"][0]["main"],
+	      ready: true
 	    });
 	  }.bind(this),
 	  error: function(xhr, status, err) {
@@ -101,18 +118,30 @@ var WeatherWidget = React.createClass({
     render: function() {
 	return (
 	  <div class="widget">
-            <h1>Weather Widget</h1>
-	    <div className="col-xs-4 col-xs-offset-4 text-center">
-	      <Location country={this.state.country} city={this.state.city} />
-	      <Weather temperature={this.state.temperature} units={this.state.units} weather={this.state.weather} />
-              <WeatherIcon image_url={this.props.image_url} icon={this.state.icon} />
+	    <div className="col-md-4 col-md-offset-4 text-center">
+	      <Location 
+		country={this.state.country} 
+		city={this.state.city} 
+		ready={this.state.ready}
+	      />
+	      <Weather 
+		temperature={this.state.temperature} 
+		units={this.state.units} 
+		weather={this.state.weather} 
+		ready={this.state.ready}
+	      />
+	      <WeatherIcon 
+		image_url={this.props.image_url} 
+		icon={this.state.icon} 
+		ready={this.state.ready}
+	      />
 	      <ConvertButton 
-	        current_units={this.state.units} 
-	        on_click={this.handleUnitChange}
-		/>
-
- 	    </div>
-          </div>
+		current_units={this.state.units} 
+		on_click={this.handleUnitChange}
+		ready={this.state.ready}
+	       />
+	    </div>
+	  </div>
 	);
     }
     
